@@ -1,4 +1,12 @@
-var storageKey = 'gu.history.summary';
+var storageKey = 'gu.history.summary',
+    today =  Math.floor(Date.now() / 86400000),
+    taxonomy = [
+        {tid: 'section',    tname: 'sectionName'},
+        {tid: 'keywordIds', tname: 'keywords'},
+        {tid: 'seriesId',   tname: 'series'},
+        {tid: 'authorIds',  tname: 'author'}
+    ];
+
 
 function getSummary() {
     var data = window &&
@@ -6,17 +14,62 @@ function getSummary() {
         window.localStorage.get(storageKey);
 
     if (!data || !data.value || !data.value.periodEnd || !data.value.tags) {
-            summary = {
-                value: {
-                    periodEnd: today,
-                    tags: {}
-                }
-            };
-        }
-        return summary.value;
+        summary = {
+            value: {
+                periodEnd: today,
+                tags: {}
+            }
+        };
     }
+    return summary.value;
+}
 
-summary = pruneSummary(getSummary());
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop)) { return false; }
+    }
+    return true;
+}
+
+function pruneSummary(summary) {
+    var updateBy = today - summary.periodEnd;
+
+    if (updateBy > 0) {
+        summary.periodEnd = today;
+
+        for (var tid in summary.tags) {
+            if (summary.tags.hasOwnProperty(tid)) {
+                var nameAndFreqs = summary.tags[tid],
+                    freqs = nameAndFreqs[1],
+                    newFreqs = [],
+                    freq,
+                    newAge;
+
+                for (i=0; i < freqs.length; i += 1) {
+                    freq = freqs[i];
+                    newAge = freq[0] + updateBy;
+                    if (newAge < summaryPeriodDays) {
+                        newFreqs.push([newAge, freq[1]]);
+                    }
+                }
+
+                if (freqs.length) {
+                    summary.tags[tid] = [nameAndFreqs[0], newFreqs];
+                } else {
+                    delete summary.tags[tid];
+                }
+            }
+        }
+
+        if (isEmpty(summary.tags)) {
+            summary.periodEnd = today;
+        }
+    }
+    return summary;
+}
+
+// TODO
+    summary = pruneSummary(getSummary());
             _.chain(taxonomy)
                 .reduceRight(function (tags, tag) {
                     var tid = firstCsv(pageConfig[tag.tid]),
