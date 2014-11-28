@@ -1,7 +1,21 @@
 <html>
 <body>
 <script>
-    (function () {
+    var pageConfig = {
+            section: "commentisfree",
+            sectionName: "Comment is Free",
+
+            keywordIds: "foo/bar,baz/poo",
+            keywords: "Foobar Tag,Bazpoo Tag",
+
+            seriesId: "foo/series/bar",
+            series: "Foobar Series",
+
+            authorIds: "profile/finbarrsaunders,profile/rogermellie",
+            author: "Finbarr Saunders, Roger Mellie"
+        };
+
+    (function (page) {
         var storageKey = 'gu.history.summary',
                 summaryPeriodDays = 30,
                 today =  Math.floor((new Date().getTime()) / 86400000),
@@ -113,9 +127,9 @@
 
         function updateSummary(page) {
             var tags,
-                    summary;
+                summary;
 
-            if (!cutsMustard()) { return; }
+            if (!page || !cutsMustard()) { return; }
 
             tags = getPageTags(page);
 
@@ -146,20 +160,10 @@
             setSummary(summary);
         }
 
-        updateSummary({
-            section: "commentisfree",
-            sectionName: "Comment is Free",
+        updateSummary(page);
 
-            keywordIds: "foo/bar,baz/poo",
-            keywords: "Foobar Tag,Bazpoo Tag",
+    })(pageConfig);
 
-            seriesId: "foo/series/bar",
-            series: "Foobar Series",
-
-            authorIds: "profile/finbarrsaunders,profile/rogermellie",
-            author: "Finbarr Saunders, Roger Mellie"
-        })
-    })();
 </script>
 </body>
 </html>
