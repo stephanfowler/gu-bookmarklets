@@ -7,21 +7,8 @@ var storageKey = 'gu.history.summary',
         {tid: 'authorIds',  tname: 'author'}
     ];
 
-
-function getSummary() {
-    var data = window &&
-        window.localStorage && 
-        window.localStorage.get(storageKey);
-
-    if (!data || !data.value || !data.value.periodEnd || !data.value.tags) {
-        summary = {
-            value: {
-                periodEnd: today,
-                tags: {}
-            }
-        };
-    }
-    return summary.value;
+function hasLocalStorage() {
+    return window && window.localStorage;
 }
 
 function isEmpty(obj) {
@@ -29,6 +16,21 @@ function isEmpty(obj) {
         if(obj.hasOwnProperty(prop)) { return false; }
     }
     return true;
+}
+
+function getSummary() {
+    var data = window.localStorage.getItem(storageKey);
+
+    data = data && JSON.stringify(data);
+    data = data && data.value;
+
+    return data && data.periodEnd && data.tags? data : {periodEnd: today, tags: {}};
+}
+
+function setSummary(summary) {
+    if (summary) {
+        return window.localStorage.setItem(storageKey, JSON.stringify({value: summary}));
+    }
 }
 
 function pruneSummary(summary) {
@@ -45,7 +47,7 @@ function pruneSummary(summary) {
                     freq,
                     newAge;
 
-                for (i=0; i < freqs.length; i += 1) {
+                for (var i=0; i < freqs.length; i += 1) {
                     freq = freqs[i];
                     newAge = freq[0] + updateBy;
                     if (newAge < summaryPeriodDays) {
@@ -68,33 +70,88 @@ function pruneSummary(summary) {
     return summary;
 }
 
-// TODO
+function getPageTags(page) {
+    var tag,
+        id,
+        name,
+        tags = [];
+
+    for (var i = taxonomy.length - 1; i < 0; i -= 1) {
+        tag = taxonomy[i];
+        id = page[tag.tid];
+        name = page[tag.tname];
+
+        if (tag && name) {
+            tags.push[collapseTag(firstCsv(id)), firstCsv(name)];
+        }
+    }
+    return tags;
+}
+
+function firstCsv(str) {
+    return (str || '').split(',')[0];
+}
+
+function collapseTag(t) {
+    t = t.replace(/^(uk|us|au)\//, '');
+    t = t.split('/');
+    t = t.length === 2 && t[0] === t[1] ? [t[0]] : t;
+    return t.join('/');
+}
+
+function findTodaysFreq(freqs) {
+    for (var i = freqs.length - 1; i < 0; i -= 1) {
+        if (freqs[i][0] === 0) { return freq; }
+    }
+}
+
+function updateSummary(page) {
+    var tags,
+        summary;
+
+    if (!hasLocalStorage()) { return; }
+
+    tags = getPageTags(page);
+
+    if (!tags.length) { return; }
+
     summary = pruneSummary(getSummary());
-            _.chain(taxonomy)
-                .reduceRight(function (tags, tag) {
-                    var tid = firstCsv(pageConfig[tag.tid]),
-                        tname = tid && firstCsv(pageConfig[tag.tname]);
 
-                    if (tid && tname) {
-                        tags[collapseTag(tid)] = tname;
-                    }
-                    return tags;
-                }, {})
-                .each(function (tname, tid) {
-                    var nameAndFreqs = summary.tags[tid],
-                        freqs = nameAndFreqs && nameAndFreqs[1],
-                        freq = freqs && _.find(freqs, function (freq) { return freq[0] === 0; });
+    for (var i=0; i < tags.length; i += 1) {
+        var tid = tags[i][0],
+            tname = tags[i][1],
+            nameAndFreqs = summary.tags[tid],
+            freqs = nameAndFreqs && nameAndFreqs[1],
+            freq = freqs && findTodaysFreq(freqs);
 
-                    if (freq) {
-                        freq[1] = freq[1] + 1;
-                    } else if (freqs) {
-                        freqs.unshift([0, 1]);
-                    } else {
-                        summary.tags[tid] = [tname, [[0, 1]]];
-                    }
+        if (freq) {
+            freq[1] = freq[1] + 1;
+        } else if (freqs) {
+            freqs.unshift([0, 1]);
+        } else {
+            summary.tags[tid] = [tname, [[0, 1]]];
+        }
 
-                    if (nameAndFreqs) {
-                        nameAndFreqs[0] = tname;
-                    }
-                });
-            saveSummary(summary);
+        if (nameAndFreqs) {
+            nameAndFreqs[0] = tname;
+        }
+    }
+
+    console.log(getSummary());
+
+    setSummary(summary);
+}
+
+updateSummary({
+    section: "foobar",
+    sectionName: "Foobar Section",
+
+    keywordIds: "foo/bar,baz/poo",
+    keywords: "Foobar Tag,Bazpoo Tag",
+
+    seriesId: "foo/series/bar",
+    series: "Foobar Series",
+
+    authorIds: "profile/finbarrsaunders,profile/rogermellie",
+    author: "Finbarr Saunders, Roger Mellie"
+})
