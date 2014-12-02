@@ -4,8 +4,8 @@
     var guardian = {};
     
     guardian.page = {
-        section: ["commentisfree"],
-        sectionName: ["Comment is Free"],
+        section: "commentisfree",
+        sectionName: "Comment is Free",
 
         keywordIds: ["foo/bar", "baz/poo"],
         keywords: ["Foobar Tag", "Bazpoo Tag"],
@@ -104,10 +104,14 @@
                 name = page[tag.tname];
 
                 if (tag && name) {
-                    tags.push([collapseTag(id[0]), name[0]]);
+                    tags.push([collapseTag(firstVal(id)), firstVal(name)]);
                 }
             }
             return tags;
+        }
+
+        function firstVal(strOrArray) {
+            return [].concat(strOrArray).join(',').split(',')[0];
         }
 
         function collapseTag(t) {
