@@ -1,19 +1,21 @@
 <html>
 <body>
 <script>
-    var pageConfig = {
-            section: "commentisfree",
-            sectionName: "Comment is Free",
+    var guardian = {};
+    
+    guardian.page = {
+        section: "commentisfree",
+        sectionName: "Comment is Free",
 
-            keywordIds: "foo/bar,baz/poo",
-            keywords: "Foobar Tag,Bazpoo Tag",
+        keywordIds: "foo/bar,baz/poo",
+        keywords: "Foobar Tag,Bazpoo Tag",
 
-            seriesId: "foo/series/bar",
-            series: "Foobar Series",
+        seriesId: "foo/series/bar",
+        series: "Foobar Series",
 
-            authorIds: "profile/finbarrsaunders,profile/rogermellie",
-            author: "Finbarr Saunders, Roger Mellie"
-        };
+        authorIds: "profile/finbarrsaunders,profile/rogermellie",
+        author: "Finbarr Saunders, Roger Mellie"
+    };
 
     (function (page) {
         var storageKey = 'gu.history.summary',
@@ -158,7 +160,7 @@
 
         updateSummary(page);
 
-    })(pageConfig);
+    })(guardian.page);
 
 </script>
 </body>
