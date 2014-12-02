@@ -102,14 +102,10 @@
                 name = page[tag.tname];
 
                 if (tag && name) {
-                    tags.push([collapseTag(firstCsv(id)), firstCsv(name)]);
+                    tags.push([collapseTag(id[0]), name[0]]);
                 }
             }
             return tags;
-        }
-
-        function firstCsv(str) {
-            return (str || '').split(',')[0];
         }
 
         function collapseTag(t) {
