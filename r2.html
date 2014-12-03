@@ -103,7 +103,7 @@
                 id = page[tag.tid];
                 name = page[tag.tname];
 
-                if (id && name) {
+                if (id && id.length && name && name.length) {
                     tags.push([collapseTag(firstVal(id)), firstVal(name)]);
                 }
             }
