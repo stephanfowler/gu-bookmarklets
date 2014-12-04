@@ -4,11 +4,11 @@
     var guardian = {};
     
     guardian.page = {
-        section: "commentisfree",
+        section: "uk/commentisfree",
         sectionName: "Comment is Free",
 
-        keywordIds: ["foo/bar", "baz/poo"],
-        keywords: ["Foobar Tag", "Bazpoo Tag"],
+        keywordIds: ["uk/london", "baz/poo"],
+        keywords: ["UK London", "Bazpoo Tag"],
 
         seriesId: ["foo/series/bar"],
         series: ["Foobar Series"],
@@ -26,7 +26,9 @@
                     {tid: 'keywordIds', tname: 'keywords'},
                     {tid: 'seriesId',   tname: 'series'},
                     {tid: 'authorIds',  tname: 'author'}
-                ];
+                ],
+                isEditionalisedRx = new RegExp(/^(uk|us|au)\/(business|commentisfree|culture|environment|media|money|sport|technology)$/),
+                stripEditionRx = new RegExp(/^(uk|us|au)\//);
 
         function cutsMustard() {
             return window && window.localStorage && JSON;
@@ -119,7 +121,9 @@
         }
 
         function collapseTag(t) {
-            t = t.replace(/^(uk|us|au)\//, '');
+            if (t.match(isEditionalisedRx)) {
+                t = t.replace(stripEditionRx, '');
+            }
             t = t.split('/');
             t = t.length === 2 && t[0] === t[1] ? [t[0]] : t;
             return t.join('/');
