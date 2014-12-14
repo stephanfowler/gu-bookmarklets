@@ -1,7 +1,6 @@
 <p>
-For raw history data as CSV, drag 
-<a href="javascript:(function()%7Bvar%20tags%20%3D%20JSON.parse(localStorage.getItem('gu.history.summary'))%2C%20str%20%3D%20''%3Bif%20(!tags%20%7C%7C%20!tags.value%20%7C%7C%20!tags.value.tags)%20%7B%20return%3B%20%7Dtags%20%3D%20tags.value.tags%3Bfor%20(var%20t%20in%20tags)%20%7Bstr%20%2B%3D%20'%22'%20%2B%20tags%5Bt%5D%5B0%5D%20%2B%20'%22%2C'%20%2B%20asCsv(tags%5Bt%5D%5B1%5D)%20%2B%20'%5Cn'%3B%7Ddocument.write('%3Cpre%3E'%20%2B%20str%20%2B%20'%3C%2Fpre%3E')%3Bfunction%20asCsv(freqs)%20%7Bvar%20arr%20%3D%20%5B%5D%3Bfreqs.forEach(function(f)%20%7B%20arr%5Bf%5B0%5D%5D%20%3D%20f%5B1%5D%3B%20%7D)%3Breturn%20arr.join('%2C')%3B%7D%7D)()">this link</a>
-to your bookmarks bar.
+For raw history data as CSV, drag this to your bookmarks bar:
+<a href="javascript:(function()%7Bvar%20tags%20%3D%20JSON.parse(localStorage.getItem('gu.history.summary'))%2C%20str%20%3D%20''%3Bif%20(!tags%20%7C%7C%20!tags.value%20%7C%7C%20!tags.value.tags)%20%7B%20return%3B%20%7Dtags%20%3D%20tags.value.tags%3Bfor%20(var%20t%20in%20tags)%20%7Bstr%20%2B%3D%20'%22'%20%2B%20tags%5Bt%5D%5B0%5D%20%2B%20'%22%2C'%20%2B%20asCsv(tags%5Bt%5D%5B1%5D)%20%2B%20'%5Cn'%3B%7Ddocument.write('%3Cpre%3E'%20%2B%20str%20%2B%20'%3C%2Fpre%3E')%3Bfunction%20asCsv(freqs)%20%7Bvar%20arr%20%3D%20%5B%5D%3Bfreqs.forEach(function(f)%20%7B%20arr%5Bf%5B0%5D%5D%20%3D%20f%5B1%5D%3B%20%7D)%3Breturn%20arr.join('%2C')%3B%7D%7D)()">history data</a>
 </p>
 <p>
   Click it when you're on www.theguardian.com
