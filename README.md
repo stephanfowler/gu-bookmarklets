@@ -20,7 +20,7 @@ function asCsv(freqs) {
 }
 ```
 
-Fixy bottom nav
+Sticky bottom nav
 ===============
 
 ```
@@ -42,6 +42,9 @@ function rePosition() {
     if (vPos[index] > curr - offset(index)) {
       el.style.position = "fixed";
       el.style.bottom = offset(index) + "px";
+      el.style.zIndex = 99;
+      el.style.marginLeft = "-20px";
+      el.style.paddingLeft = "20px";
       el.style.width = "230px";
       el.style.background = "#ffffff";
       el.classList.add("js-fixed");
@@ -53,10 +56,10 @@ function rePosition() {
   });
 }
 
-function offset(index) { return (titles.length - index - 1) * titleHeight + 10; }
+function offset(index) { return (titles.length - index - 1) * titleHeight; }
 
 if (x >= 1300) {
-  sections = Array.prototype.slice.call(document.querySelectorAll('section')).slice(1);
+  sections = Array.prototype.slice.call(document.querySelectorAll('section:not(.fc-container--thrasher)')).slice(1);
 
   titles = sections.map(function(section) {
     return section.querySelector('.fc-container__header__title');
