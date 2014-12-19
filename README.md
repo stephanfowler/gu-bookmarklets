@@ -68,7 +68,7 @@ if (x >= 1300) {
   titles.forEach(function(el, index) {
     el.addEventListener("click", function(e) {
       if (el.classList.contains("fixed")) {
-        window.scrollTo(0, vPos[index] - 15);
+        window.scrollTo(0, vPosAll[index] - 15);
         e.preventDefault();
       }
     });
