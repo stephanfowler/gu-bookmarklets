@@ -39,7 +39,7 @@ var titleHeight = 28;
 function rePosition() {
   var curr = window.scrollY + y - titleHeight;
   titles.forEach(function(el, index) {
-    if (vPos[index] > curr - offset(index)) {
+    if (vPos[index] > curr - offset(index) - 20) {
       el.classList.add("fixed");
       el.style.bottom = offset(index) + "px";
     } else {
@@ -53,7 +53,7 @@ function offset(index) { return (titles.length - index - 1) * titleHeight; }
 
 var css = document.createElement("style");
 css.type = "text/css";
-css.innerHTML = ".fc-container__header__title.fixed a:after {display: none;} .fc-container__header__title.fixed {position: fixed; z-index: 99; margin-left: -20px; padding-left: 20px; width: 230px; color: #666666; background: #ffffff; cursor: pointer; }";
+css.innerHTML = ".fc-container__header__title.fixed a:after {display: none;} .fc-container__header__title.fixed {position: fixed; z-index: 99; margin-left: -20px; padding-left: 20px; width: 230px; color: #5b5b5b; background: #ffffff; cursor: pointer; padding-bottom: 20px;}";
 document.body.appendChild(css);
 
 if (x >= 1300) {
