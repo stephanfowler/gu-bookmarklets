@@ -30,16 +30,18 @@ var w = window,
     g = d.getElementsByTagName('body')[0],
     x = w.innerWidth || e.clientWidth || g.clientWidth,
     y = w.innerHeight|| e.clientHeight|| g.clientHeight,
-    sections,
+    vPos,
     titles,
-    vPos;
+    vPosAll;
 
 var titleHeight = 28;
 
 function rePosition() {
-  var curr = window.scrollY + y - titleHeight;
+  var newVPos = window.scrollY + y - titleHeight;
+  if (vPos === newVPos) { return; }
+  vPos = newVPos;  
   titles.forEach(function(el, index) {
-    if (vPos[index] > curr - offset(index) - 20) {
+    if (vPosAll[index] > vPos - offset(index) - 20) {
       el.classList.add("fixed");
       el.style.bottom = offset(index) + "px";
     } else {
@@ -57,13 +59,11 @@ css.innerHTML = ".fc-container__header__title.fixed a:after {display: none;} .fc
 document.body.appendChild(css);
 
 if (x >= 1300) {
-  sections = Array.prototype.slice.call(document.querySelectorAll('section:not(.fc-container--thrasher)')).slice(1);
-
-  titles = sections.map(function(section) {
+  titles = Array.prototype.slice.call(document.querySelectorAll('section:not(.fc-container--thrasher)')).slice(1).map(function(section) {
     return section.querySelector('.fc-container__header__title');
   }).filter(function(title) { return title; });
 
-  vPos = titles.map(function(el) { return el.getBoundingClientRect().top; });
+  vPosAll = titles.map(function(el) { return el.getBoundingClientRect().top; });
 
   titles.forEach(function(el, index) {
     el.addEventListener("click", function(e) {
