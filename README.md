@@ -44,9 +44,11 @@ function rePosition() {
       el.style.bottom = offset(index) + "px";
       el.style.width = "230px";
       el.style.background = "#ffffff";
+      el.classList.add("js-fixed");
     } else {
       el.style.position = "inherit";
       el.style.bottom = "inherit";      
+      el.classList.remove("js-fixed");
     }
   });
 }
@@ -63,7 +65,12 @@ if (x >= 1300) {
   vPos = titles.map(function(el) { return el.getBoundingClientRect().top; });
 
   titles.forEach(function(el, index) {
-    el.addEventListener("click", function() {window.scrollTo(0, vPos[index] - 15);});
+    el.addEventListener("click", function(e) {
+      if (el.classList.contains("js-fixed")) {
+        window.scrollTo(0, vPos[index] - 15);
+        e.preventDefault();
+      }
+    });
   });
 
   setInterval(rePosition, 10);
