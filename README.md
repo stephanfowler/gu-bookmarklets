@@ -40,23 +40,21 @@ function rePosition() {
   var curr = window.scrollY + y - titleHeight;
   titles.forEach(function(el, index) {
     if (vPos[index] > curr - offset(index)) {
-      el.style.position = "fixed";
+      el.classList.add("fixed");
       el.style.bottom = offset(index) + "px";
-      el.style.zIndex = 99;
-      el.style.marginLeft = "-20px";
-      el.style.paddingLeft = "20px";
-      el.style.width = "230px";
-      el.style.background = "#ffffff";
-      el.classList.add("js-fixed");
     } else {
-      el.style.position = "inherit";
-      el.style.bottom = "inherit";      
-      el.classList.remove("js-fixed");
+      el.classList.remove("fixed");
+      el.style.bottom = "inherit";
     }
   });
 }
 
 function offset(index) { return (titles.length - index - 1) * titleHeight; }
+
+var css = document.createElement("style");
+css.type = "text/css";
+css.innerHTML = ".fc-container__header__title.fixed a:after {display: none;} .fc-container__header__title.fixed {position: fixed; z-index: 99; margin-left: -20px; padding-left: 20px; width: 230px; color: #666666; background: #ffffff; cursor: pointer; }";
+document.body.appendChild(css);
 
 if (x >= 1300) {
   sections = Array.prototype.slice.call(document.querySelectorAll('section:not(.fc-container--thrasher)')).slice(1);
@@ -69,7 +67,7 @@ if (x >= 1300) {
 
   titles.forEach(function(el, index) {
     el.addEventListener("click", function(e) {
-      if (el.classList.contains("js-fixed")) {
+      if (el.classList.contains("fixed")) {
         window.scrollTo(0, vPos[index] - 15);
         e.preventDefault();
       }
