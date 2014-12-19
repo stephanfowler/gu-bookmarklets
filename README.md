@@ -1,5 +1,5 @@
-gu-history-bookmarklet
-======================
+History data bookmarklet
+========================
 ```
 var tags = JSON.parse(localStorage.getItem('gu.history.summary')), str = '';
 
