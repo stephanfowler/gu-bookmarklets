@@ -54,7 +54,7 @@ function getPosition(el) {
 }
 
 function setPositions() {
-  vPosNow = window.scrollY;
+  vPosNow = w.scrollY;
 
   if (vPosCache !== vPosNow) {
     vPosCache = vPosNow;  
@@ -100,7 +100,7 @@ if (winWidth >= 1024) {
   titles.forEach(function(el, index) {
     el.addEventListener("click", function(e) {
       if (el.classList.contains("fixed")) {
-        window.scrollTo(0, vPosAll[index]);
+        w.scrollTo(0, vPosAll[index]);
         e.preventDefault();
       }
     });
