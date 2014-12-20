@@ -1,4 +1,1 @@
-gu-history
-==========
-
-[here](http://stephanfowler.com/gu-bookmarklets/)
+[random bookmarklets etc](http://stephanfowler.com/gu-bookmarklets/)
