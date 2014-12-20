@@ -32,37 +32,45 @@ var w = window,
     winHeight = w.innerHeight|| e.clientHeight|| g.clientHeight,
 
     vPosNow = w.scrollY,
-    vPosCache = 0,
+    vPosCache,
     vPosAll = [],
 
     sections,
+    sectionOne,
+    sectionOnePos,
     titles,
 
     heights = [],
     offsets = [],
     lastIndex = -1;
 
-function getPositions() {
-    if (vPosAll[lastIndex] !== getPosition(sections[lastIndex])) {
-      winHeight = w.innerHeight|| e.clientHeight|| g.clientHeight;
-      vPosAll = sections.map(getPosition);
-    }
-}
-
 function getPosition(el) {
     return vPosNow + el.getBoundingClientRect().top;
 }
 
-function setPositions() {
-  vPosNow = w.scrollY;
+function getPositions() {
+    if (vPosAll[lastIndex] !== getPosition(sections[lastIndex])) {
+      winHeight = w.innerHeight|| e.clientHeight|| g.clientHeight;
+      vPosAll = sections.map(getPosition);
+      sectionOnePos = getPosition(sectionOne);
+      setPositions(true);
+    }
+}
 
-  if (vPosCache !== vPosNow) {
-    vPosCache = vPosNow;  
+function setPositions(forced) {
+  var offScreen;
+
+  vPosNow = Math.max(0, w.scrollY);
+
+  if (vPosCache !== vPosNow || forced) {
+    vPosCache = vPosNow;
+
+    offScreen = Math.min(0, winHeight + vPosNow - sectionOnePos - offsets[0] - heights[0] - 100);
 
     titles.forEach(function(el, i) {
       if (vPosAll[i] >  winHeight + vPosNow - offsets[i] - heights[i] + 5) {
         el.classList.add("fixed");
-        el.style.bottom = (offsets[i + 1] || 0) + "px";
+        el.style.bottom = (offsets[i + 1] || 0) + offScreen + "px";
       } else {
         el.classList.remove("fixed");
         el.style.bottom = "inherit";
@@ -79,7 +87,9 @@ function addCss() {
 }
 
 if (winWidth >= 1024) {
-  sections = Array.prototype.slice.call(document.querySelectorAll('section:not(.fc-container--thrasher)')).slice(1).filter(function(section) {return section.querySelector('.fc-container__header__title');})
+  sections = Array.prototype.slice.call(document.querySelectorAll('section:not(.fc-container--thrasher)')).filter(function(section) {return section.querySelector('.fc-container__header__title');})
+
+  sectionOne = sections.splice(0,1)[0];
 
   titles = sections.map(function(section) {return section.querySelector('.fc-container__header__title');});
 
@@ -92,10 +102,9 @@ if (winWidth >= 1024) {
 
   addCss();
   getPositions();
-  setPositions();
 
-  setInterval(getPositions, 1000);
-  setInterval(setPositions, 10);
+  setInterval(getPositions, 51);
+  setInterval(setPositions, 11);
 
   titles.forEach(function(el, index) {
     el.addEventListener("click", function(e) {
